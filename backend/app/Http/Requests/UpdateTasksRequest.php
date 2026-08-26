@@ -1,9 +1,9 @@
 <?php
-
 namespace App\Http\Requests;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class UpdateTasksRequest extends FormRequest
 {
@@ -12,7 +12,8 @@ class UpdateTasksRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
+
     }
 
     /**
@@ -23,7 +24,12 @@ class UpdateTasksRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'title'       => 'sometimes|string|max:255',
+            'description' => 'string',
+            'priority'    => 'sometimes|in:low,medium,high',
+            'status'      => 'sometimes|in:pending,in_progress,completed',
+            'assigned_to' => 'exists:users,id',
+            'created_by'  => 'exists:users,id',
         ];
     }
 }
