@@ -1,12 +1,14 @@
 <?php
-
 namespace App\Policies;
 
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class UserPolicy
 {
+    public function before(User $user, string $ability): bool
+    {
+        return ($user->role === "admin") ? true : null;
+    }
     /**
      * Determine whether the user can view any models.
      */
@@ -20,7 +22,7 @@ class UserPolicy
      */
     public function view(User $user, User $model): bool
     {
-        return false;
+        return $user->id === $model->id;
     }
 
     /**
@@ -29,6 +31,7 @@ class UserPolicy
     public function create(User $user): bool
     {
         return false;
+
     }
 
     /**
@@ -36,7 +39,8 @@ class UserPolicy
      */
     public function update(User $user, User $model): bool
     {
-        return false;
+        return $user->id === $model->id;
+
     }
 
     /**
@@ -44,7 +48,8 @@ class UserPolicy
      */
     public function delete(User $user, User $model): bool
     {
-        return false;
+        return $user->id === $model->id;
+
     }
 
     /**

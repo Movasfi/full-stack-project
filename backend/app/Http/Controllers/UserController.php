@@ -6,6 +6,7 @@ use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class UserController extends Controller
 {
@@ -14,6 +15,7 @@ class UserController extends Controller
      */
     public function index(User $user)
     {
+        Gate::authorize('viewAny', User::class);
         $users = $user->all();
 
         return response()->json([
@@ -40,6 +42,7 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
+        Gate::authorize('view', User::class);
         return response()->json([
             "message" => "userData is sent",
             "data"    => $user,
