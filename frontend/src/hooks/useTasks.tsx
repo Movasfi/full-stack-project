@@ -5,7 +5,7 @@ const useTasks = () => {
     return useQuery({
         queryKey: ['tasks'],
         queryFn: getTasks,
-        enabled: true
+        staleTime: 5 * 60 * 1000,
     })
 }
 

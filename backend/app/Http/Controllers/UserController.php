@@ -15,7 +15,6 @@ class UserController extends Controller
      */
     public function index(User $user)
     {
-        Gate::authorize('viewAny', User::class);
         $users = $user->all();
 
         return response()->json([
@@ -42,7 +41,6 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        Gate::authorize('view', User::class);
         return response()->json([
             "message" => "userData is sent",
             "data"    => $user,
@@ -75,20 +73,21 @@ class UserController extends Controller
 
     public function login(Request $request)
     {
-        $creadentials = $request->validate([
+        $credentials = $request->validate([
             'email'    => ['email', 'required'],
             'password' => ['string', 'required', 'min:8'],
         ]);
 
-        if (! Auth::attempt($creadentials)) {
+        if (! Auth::attempt($credentials)) {
             return response()->json([
                 'message' => 'Invalid credentials',
             ], 401);
         }
-
+        $user = User::where('email', $credentials['email'])->first();
         $request->session()->regenerate();
         return response()->json([
             'message' => 'Login successful',
+            "user"    => $user,
         ], 200);
     }
 

@@ -3,25 +3,24 @@ import { Input } from "@/components/ui/input"
 import { Link, useNavigate } from "react-router"
 import { useForm } from "react-hook-form";
 import type { IFormLogin } from "@/types/Form";
-import { useCallback, type SubmitEvent } from "react";
-import useLogin from "@/modules/login/hooks/useSignup";
+import useLogin from "@/modules/login/hooks/useLogin";
 import Dialog from "../Dialog";
+import useTheme from "@/hooks/useTheme";
 const Login = () => {
+    const { theme } = useTheme()
     const { mutate, isError, error, isSuccess, reset: closeError } = useLogin()
     const { formState, handleSubmit, register, reset, setError } = useForm<IFormLogin>();
     const { isSubmitting, isSubmitted, errors } = formState;
     const navgaite = useNavigate()
-    const onClose = useCallback(() => {
-        closeError();
-    }, [closeError]);
+
     const onSubmit = (data: IFormLogin) => {
         mutate(data);
         isSuccess ? navgaite('/') : "error"
 
     }
     return (
-        <div className="min-h-screen bg-[#f3f4f6] flex items-center justify-center p-4 font-sans">
-            <div className="w-full max-w-[420px] bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+        <div className={`min-h-screen ${theme}  flex items-center justify-center p-4 font-sans`}>
+            <div className={`w-full  max-w-[420px] bg-white rounded-2xl shadow-sm border border-gray-100 p-8`}>
 
                 <div className="mb-8 text-center">
                     <h1 className="text-2xl font-semibold text-gray-900">
@@ -35,7 +34,7 @@ const Login = () => {
 
                 <form
                     onSubmit={handleSubmit(onSubmit)}
-                    className="space-y-5"
+                    className="space-y-5 text-black"
                 >
                     {/* Email */}
                     <div>
@@ -126,7 +125,7 @@ const Login = () => {
                     </Link>
                 </div>
             </div>
-            <Dialog resetFields={reset} errorType="login" errorMessage={error?.message} closeError={onClose} isError={isError} />
+            <Dialog resetFields={reset} errorType="login" errorMessage={error?.message} closeError={closeError} isError={isError} />
         </div>
 
     )

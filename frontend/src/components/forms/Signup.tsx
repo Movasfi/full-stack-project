@@ -5,8 +5,10 @@ import { useForm } from "react-hook-form";
 import { Button } from "../ui/button";
 import useSignup from "@/modules/signup/hooks/useSignup";
 import Dialog from "../Dialog";
+import useTheme from "@/hooks/useTheme";
 
 const Signup = () => {
+    const {theme} = useTheme()
     const { formState, register, handleSubmit, reset } = useForm<IFormSingUp>({ reValidateMode: "onChange" })
     const { isSubmitting } = formState
     const { mutate, error, isError, reset: resetRequest } = useSignup()
@@ -17,7 +19,7 @@ const Signup = () => {
     };
 
     return (
-        <div className="min-h-screen w-full flex items-center justify-center p-4 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-purple-100/50 via-white to-emerald-100/40 font-sans">
+        <div className={`min-h-screen w-full flex items-center justify-center p-4 ${theme} from-purple-100/50 via-white to-emerald-100/40 font-sans`}>
             {/* Main Card */}
             <div className="w-full max-w-[420px] bg-white rounded-2xl shadow-xl shadow-black/5 border border-gray-100/80 overflow-hidden">
 
@@ -39,7 +41,7 @@ const Signup = () => {
 
                 {/* Form Section */}
                 <div className="p-8 pt-6">
-                    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+                    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 text-black">
                         <div>
                             <label className="block text-[10px] font-bold text-gray-400 tracking-wider uppercase mb-1.5">
                                 FULL NAME

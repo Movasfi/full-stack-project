@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreTasksRequest;
 use App\Http\Requests\UpdateTasksRequest;
 use App\Models\Tasks;
+use function Pest\Laravel\get;
 
 class TasksController extends Controller
 {
@@ -13,7 +14,7 @@ class TasksController extends Controller
     public function index()
     {
 
-        $allTasks = Tasks::all();
+        $allTasks = Tasks::with(['admin:id,name', 'worker:id,name'])->get();
         return response()->json([
             "message" => "all tasks",
             "data"    => $allTasks,
@@ -26,7 +27,7 @@ class TasksController extends Controller
     public function store(StoreTasksRequest $request)
     {
         $validatedData = $request->validated();
-        $task = Tasks::create($validatedData);
+        $task          = Tasks::create($validatedData);
 
         return response()->json([
             'message' => 'task is created',
@@ -64,7 +65,7 @@ class TasksController extends Controller
      */
     public function destroy(Tasks $task)
     {
-        
+
         $task->delete();
         return response()->json([
             'message' => 'task is deleted ',

@@ -10,20 +10,35 @@ use Illuminate\Support\Facades\Route;
 Route::post('signup', [UserController::class, 'signup']);
 
 Route::middleware(['auth:sanctum'])->group(function () {
+// signup
+    Route::post('signup', [UserController::class, 'signup']);
 
-    // create a user
-    Route::post('user', [UserController::class, 'store'])->middleware('can:create,' . User::class);;
+    Route::middleware(['auth:sanctum'])->group(function () {
 
-    // get all users
-    Route::get('user', [UserController::class, 'index'])->middleware('can:viewAny,' . User::class);
+        // create a user
+        Route::post('user', [UserController::class, 'store'])->middleware('can:create,' . User::class);;
 
-    // get user by id
-    Route::get('user/{user}', [UserController::class, 'show'])->middleware('can:view,user');
+        // get all users
+        Route::get('user', [UserController::class, 'index'])->middleware('can:viewAny,' . User::class);
 
-    // update user by id
-    Route::put('user/{user}', [UserController::class, 'update'])->middleware('can:update,user');
+        // get user by id
+        Route::get('user/{user}', [UserController::class, 'show'])->middleware('can:view,user');
 
-    // delete user by id
+        Route::get('me', [UserController::class, 'show'])->middleware('can:view' . User::class);
+
+        // update user by id
+        Route::put('user/{user}', [UserController::class, 'update'])->middleware('can:update,user')->middleware('can:update,user');
+
+        // delete user by id
+        Route::delete('user/{user}', [UserController::class, 'destroy'])->middleware('can:delete,user');
+
+        Route::post('task', [TasksController::class, 'store'])->middleware('can:create,' . Tasks::class);
+        Route::get('task', [TasksController::class, 'index'])->middleware('can:viewAny,' . Tasks::class);
+        Route::get('task/{task}', [TasksController::class, 'show'])->middleware('can:view,task');
+        Route::put('task/{task}', [TasksController::class, 'update'])->middleware('can:update,task');
+        Route::delete('task/{task}', [TasksController::class, 'destroy'])->middleware('can:delete,task');
+
+    });
     Route::delete('user/{user}', [UserController::class, 'destroy'])->middleware('can:delete,user');
 
     Route::post('task', [TasksController::class, 'store'])->middleware('can:create,' . Tasks::class);
