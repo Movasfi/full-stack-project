@@ -1,1 +1,2 @@
-export type Status = 'all' | 'done' | 'in_progress' | "pending";
+export type Status = 'all' | 'completed' | 'in_progress' | "pending";
+export type Priority = 'low' | 'medium' | 'high';

@@ -1,13 +1,20 @@
 <?php
-
 namespace App\Policies;
 
 use App\Models\Tasks;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class TasksPolicy
 {
+
+    public function before(User $user, string $ability): ?bool
+    {
+        if ($user->role === 'admin') {
+            return true;
+        }
+
+        return null;
+    }
     /**
      * Determine whether the user can view any models.
      */
@@ -21,7 +28,7 @@ class TasksPolicy
      */
     public function view(User $user, Tasks $tasks): bool
     {
-        return false;
+        return $user->id === $tasks->created_by;
     }
 
     /**
