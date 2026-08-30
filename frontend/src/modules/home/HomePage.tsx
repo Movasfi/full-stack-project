@@ -6,6 +6,9 @@ import type { ITask } from "@/types/getTasksType";
 import useTasks from "@/hooks/useTasks";
 import useTheme from "@/hooks/useTheme";
 import useMe from "@/hooks/useMe";
+import { useAuth } from "@/hooks/useAuth";
+import LoadingPage from "@/pages/LoadingPage";
+import { useNavigate } from "react-router";
 
 // TypeScript Types
 export type Priority = 'low' | 'medium' | 'high';
@@ -13,10 +16,11 @@ export type Priority = 'low' | 'medium' | 'high';
 
 const HomePage = () => {
     const { darkMode, theme } = useTheme()
+    const { user, isAuthenticated } = useAuth()
     const [taskCategory, setTaskCategory] = useState<Status>('all')
     const [taskPriority, setTaskPriority] = useState<Priority | "all">('all')
-    const { data: tasks, isLoading } = useTasks();
-    const { data: me } = useMe({ enabled: false })
+    const { data: tasks, isLoading } = useTasks({ enabled: isAuthenticated });
+
 
 
     const data: ITask[] = tasks?.data.data;
@@ -84,11 +88,12 @@ const HomePage = () => {
 
 
     useEffect(() => {
-        console.log(data);
-        console.log(me);
-    }, [data, me]);
+        console.log(user);
+        console.log(statusData);
+
+    }, [user]);
     if (isLoading) {
-        return <div>data is fetching</div>
+        return <LoadingPage />
     }
 
     return (

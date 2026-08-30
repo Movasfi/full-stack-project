@@ -6,18 +6,24 @@ import type { IFormLogin } from "@/types/Form";
 import useLogin from "@/modules/login/hooks/useLogin";
 import Dialog from "../Dialog";
 import useTheme from "@/hooks/useTheme";
+import { useEffect } from "react";
+import { useAuth } from "@/hooks/useAuth";
 const Login = () => {
     const { theme } = useTheme()
     const { mutate, isError, error, isSuccess, reset: closeError } = useLogin()
     const { formState, handleSubmit, register, reset, setError } = useForm<IFormLogin>();
     const { isSubmitting, isSubmitted, errors } = formState;
     const navgaite = useNavigate()
-
+    const { isAuth, isAuthenticated } = useAuth()
     const onSubmit = (data: IFormLogin) => {
         mutate(data);
         isSuccess ? navgaite('/') : "error"
 
     }
+
+    useEffect(() => {
+        console.log(`user guest ${isAuthenticated} == ${isAuth}`);
+    })
     return (
         <div className={`min-h-screen ${theme}  flex items-center justify-center p-4 font-sans`}>
             <div className={`w-full  max-w-[420px] bg-white rounded-2xl shadow-sm border border-gray-100 p-8`}>

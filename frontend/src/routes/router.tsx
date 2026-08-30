@@ -1,7 +1,9 @@
+import GuestRoute from "@/auth/GuestRoute";
 import ProtectedRoute from "@/auth/ProtectedRoute";
 import MainLayout from "@/components/layout/MainLayout";
+import AddUser from "@/modules/admin/add-user/AddUser";
+import Dashboard from "@/modules/admin/dashboard/Dashboard";
 import HomePage from "@/modules/home/HomePage";
-import useLogin from "@/modules/login/hooks/useLogin";
 import LoginPage from "@/modules/login/LoginPage";
 import ProfilePage from "@/modules/profile/ProfilePage";
 import { SignupPage } from "@/modules/signup/SignupPage";
@@ -14,9 +16,7 @@ export const routes = createBrowserRouter([{
     element: <MainLayout />,
     children: [
         {
-            element: (
-                <ProtectedRoute />
-            ),
+            element: <ProtectedRoute />,
             children: [
                 {
                     index: true,
@@ -26,15 +26,33 @@ export const routes = createBrowserRouter([{
                     path: "profile",
                     element: <ProfilePage />,
                 },
+                {
+                    path: "admin",
+                    element: <Dashboard />,
+                },
+                {
+                    path: "users/edit/:id",
+                    element: <div>edit user</div>,
+                },
+                {
+                    path: "users/add",
+                    element: <AddUser />,
+                },
+
             ],
         },
         {
-            path: 'login',
-            element: <LoginPage />
-        },
-        {
-            path: "signup",
-            element: <SignupPage />
+            element: <GuestRoute />,
+            children: [
+                {
+                    path: "login",
+                    element: <LoginPage />,
+                },
+                {
+                    path: "signup",
+                    element: <SignupPage />,
+                },
+            ],
         },
 
     ]

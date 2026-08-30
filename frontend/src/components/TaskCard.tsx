@@ -13,7 +13,7 @@ interface IProps {
     dataByStatus: ITask[],
     // dataByPriority: ITask[]
 }
-const TaskCard = ({ dataByStatus }: IProps) => {
+const TaskCard = ({ dataByStatus = [] }: IProps) => {
 
     const statusClasses = {
         completed: "bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-400 dark:border-emerald-800",

@@ -1,11 +1,14 @@
 import { getTasks } from "@/services/getTasks"
 import { useQuery } from "@tanstack/react-query"
-
-const useTasks = () => {
+interface IProps {
+    enabled?: boolean
+}
+const useTasks = ({ enabled }: IProps) => {
     return useQuery({
         queryKey: ['tasks'],
         queryFn: getTasks,
-        staleTime: 5 * 60 * 1000,
+        enabled,
+        staleTime: 5 * 1000 * 60
     })
 }
 
