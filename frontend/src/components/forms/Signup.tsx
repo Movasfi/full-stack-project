@@ -6,18 +6,24 @@ import { Button } from "../ui/button";
 import useSignup from "@/modules/signup/hooks/useSignup";
 import Dialog from "../Dialog";
 import useTheme from "@/hooks/useTheme";
+import { useEffect } from "react";
+import { useAuth } from "@/hooks/useAuth";
 
 const Signup = () => {
-    const {theme} = useTheme()
+    const { theme } = useTheme()
     const { formState, register, handleSubmit, reset } = useForm<IFormSingUp>({ reValidateMode: "onChange" })
     const { isSubmitting } = formState
     const { mutate, error, isError, reset: resetRequest } = useSignup()
+    const { isAuthenticated } = useAuth()
     const onSubmit = (data: IFormSingUp) => {
         console.log(data);
         mutate(data)
 
     };
 
+    useEffect(() => {
+        console.log(`user guest ${isAuthenticated}`);
+    })
     return (
         <div className={`min-h-screen w-full flex items-center justify-center p-4 ${theme} from-purple-100/50 via-white to-emerald-100/40 font-sans`}>
             {/* Main Card */}

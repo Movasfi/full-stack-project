@@ -15,8 +15,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('user', [UserController::class, 'store'])->middleware('can:create,' . User::class);;
 
     // get all users
-    Route::get('user', [UserController::class, 'index'])->middleware('can:viewAny,' . User::class);
+    Route::get('users', [UserController::class, 'index'])->middleware('can:viewAny,' . User::class);
 
+    // get number of users
+    Route::get('users/count', [UserController::class, 'usersCountByRole'])->middleware('can:viewAny,' . User::class);
+    
     // get user by id
     Route::get('user/{user}', [UserController::class, 'show'])->middleware('can:view,user');
 

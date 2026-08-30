@@ -3,11 +3,10 @@ import {
     type ReactNode,
 } from "react";
 import useMe from "@/hooks/useMe";
-import type { AxiosResponse } from "axios";
-import { useLocation } from "react-router";
+import type { IUser } from "@/modules/admin/dashboard/types";
 
 interface IAuthContext {
-    user: AxiosResponse | null
+    user: IUser | null
     isLoading: boolean;
     isAuthenticated: boolean;
 }
@@ -19,19 +18,16 @@ interface IProps {
 }
 
 export const AuthProvider = ({ children }: IProps) => {
-    const location = useLocation();
 
-    const isAuthPage =
-        location.pathname === "/login" ||
-        location.pathname === "/signup";
-    const { data: user, isLoading } = useMe({
-        enabled: !isAuthPage,
-    });
+
+    const { data: user, isLoading } = useMe();
+    console.log(user);
+
 
     const value: IAuthContext = {
         user: user ?? null,
         isLoading,
-        isAuthenticated: user ? true : false
+        isAuthenticated: !!user
     };
 
     return (

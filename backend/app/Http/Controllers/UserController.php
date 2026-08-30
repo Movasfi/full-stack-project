@@ -6,6 +6,7 @@ use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
@@ -14,7 +15,9 @@ class UserController extends Controller
      */
     public function index(User $user)
     {
-        $users = $user->all();
+        $users = DB::table('users')
+            ->select(['id', 'name', 'email', 'role', 'created_at'])
+            ->get();
 
         return response()->json([
             'message' => "all users",
@@ -38,11 +41,11 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(User $user)
+    public function show()
     {
         return response()->json([
             "message" => "userData is sent",
-            "data"    => $user,
+            "data"    => Auth::user(),
         ]);
     }
 
@@ -65,6 +68,7 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         $user->delete();
+        
         return response()->json([
             "message" => "user is deleted with name $user->name",
         ]);
@@ -107,13 +111,25 @@ class UserController extends Controller
 
     public function logout(Request $request)
     {
+
         Auth::logout();
 
         $request->session()->invalidate();
+
         $request->session()->regenerateToken();
 
         return response()->json([
             'message' => 'Logout successful',
+        ]);
+    }
+
+    public function usersCountByRole()
+    {
+        $users = DB::table('users')->select('role', DB::raw('count(*) as total'))->groupBy('role')->get()->pluck('total', 'role');
+
+        return response()->json([
+            'message' => "users amount by role",
+            'amount'  => $users,
         ]);
     }
 }
